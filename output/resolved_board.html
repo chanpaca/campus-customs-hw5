@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campus Customs — Resolved Board</title>
+<style>
+  :root{
+    --yale:#00356b; --yale-700:#002a56; --yale-100:#e6edf5; --yale-050:#f3f7fb;
+    --bg:#f1f4f8; --card:#fff; --line:#dbe3ed; --ink:#16202c; --muted:#5a6b7e; --faint:#8b9aab;
+    --green:#15704a; --green-bg:#e8f5ee; --amber:#8a6d1f; --amber-bg:#fdf6e4;
+    --red:#a32e22; --red-bg:#fbecea;
+    --boss:#00356b; --boss-bg:#e6edf5; --inv:#0f6b5c; --inv-bg:#e4f2ef;
+    --acct:#8a4b12; --acct-bg:#fbefe3; --fac:#5b3a93; --fac-bg:#efe9f8;
+    --cs:#9c2a5c; --cs-bg:#fbe9f1;
+    --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 22px 60px}
+
+  header{background:linear-gradient(165deg,var(--yale),var(--yale-700));color:#fff;
+    border-bottom:3px solid #d8b641;padding:30px 0 24px}
+  header h1{margin:0 0 4px;font-family:Georgia,serif;font-size:26px;font-weight:600}
+  header .sub{margin:0;color:#b8cde4;font-size:14px}
+  .stats{display:flex;gap:28px;flex-wrap:wrap;margin-top:20px}
+  .stat .k{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#b8cde4}
+  .stat .v{display:block;font-family:var(--mono);font-size:25px;font-weight:600;letter-spacing:-.02em}
+  .stat .v.down{color:#ffd97a}
+
+  .modebar{background:var(--red-bg);border-bottom:1px solid #f0cdc8;color:#7d2219;
+    font-size:13.5px;padding:11px 0}
+  .modebar .wrap{padding-bottom:0}
+  .modebar b{color:var(--red)}
+
+  h2{margin:30px 0 12px;font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--yale)}
+
+  .board{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:18px}
+  .tcard{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+    box-shadow:0 1px 2px rgba(0,53,107,.05)}
+  .tcard .top{padding:14px 18px;border-bottom:1px solid var(--line);background:var(--yale-050);
+    display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .tid{font-family:var(--mono);font-size:12.5px;color:var(--faint)}
+  .badge{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+    border-radius:999px;padding:3px 10px;white-space:nowrap}
+  .badge.resolved{background:var(--green-bg);color:var(--green)}
+  .badge.nocash{background:var(--amber-bg);color:var(--amber)}
+  .tcard .body{padding:16px 18px}
+  .subject{font-weight:600;font-size:16px;margin-bottom:2px}
+  .requester{font-size:13px;color:var(--muted);margin-bottom:12px}
+  .outcome{font-size:14px;margin:0 0 14px}
+
+  .chain{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-bottom:12px}
+  .ag{font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+    border-radius:5px;padding:3px 7px}
+  .ag.boss{background:var(--boss-bg);color:var(--boss)}
+  .ag.inventory{background:var(--inv-bg);color:var(--inv)}
+  .ag.accounting{background:var(--acct-bg);color:var(--acct)}
+  .ag.facilities{background:var(--fac-bg);color:var(--fac)}
+  .ag.customer_service{background:var(--cs-bg);color:var(--cs)}
+  .arrow{color:#4a7ab0}
+
+  .kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px;margin-bottom:12px}
+  .kv div{background:#f7f9fc;border:1px solid var(--line);border-radius:6px;padding:7px 9px}
+  .kv span{display:block;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--faint)}
+  .kv strong{font-family:var(--mono);font-size:14px;font-weight:600}
+
+  .tools{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+  .tools li{list-style:none;font-family:var(--mono);font-size:11.5px;background:var(--yale-100);
+    color:var(--yale);border-radius:4px;padding:2px 7px}
+  ul.tools{margin:0;padding:0}
+
+  .approval{border-left:3px solid var(--green);background:var(--green-bg);padding:9px 12px;
+    border-radius:0 6px 6px 0;font-size:13px}
+  .approval.none{border-left-color:var(--amber);background:var(--amber-bg)}
+  .approval b{font-family:var(--mono)}
+
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);
+    border-radius:10px;overflow:hidden;font-size:14px}
+  th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line)}
+  th{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);background:var(--yale-050)}
+  td.num{text-align:right;font-family:var(--mono)}
+  tr:last-child td{border-bottom:none}
+  tr.total td{font-weight:700;border-top:2px solid var(--yale);background:var(--yale-050)}
+
+  .note{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--yale);
+    border-radius:0 10px 10px 0;padding:14px 18px;margin-top:16px;font-size:14px}
+  .note b{color:var(--yale)}
+  footer{color:var(--faint);font-size:12.5px;text-align:center;padding:26px 0 0}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Campus Customs — Resolved Board</h1>
+    <p class="sub">Final state after running tickets 101, 102 and 103 · desk date 2026-08-31</p>
+    <div class="stats">
+      <div class="stat"><span class="k">Opening checking</span><span class="v">$3,400.00</span></div>
+      <div class="stat"><span class="k">Disbursed</span><span class="v down">−$3,240.00</span></div>
+      <div class="stat"><span class="k">Ending checking</span><span class="v">$160.00</span></div>
+      <div class="stat"><span class="k">Tickets resolved</span><span class="v">3 / 3</span></div>
+      <div class="stat"><span class="k">Human approvals</span><span class="v">2</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="modebar">
+  <div class="wrap">
+    <b>Executed without a live model.</b> The Portkey key for <code>gpt-6-luna</code> is over its
+    usage limit (HTTP 412), so the agent team could not reason. This run was carried out by
+    <code>backend/scripted_run.py</code> following the plan in <code>desk_tickets.html</code>.
+    Every tool call, database write and human approval shown here is real; the routing decisions
+    were scripted rather than model-chosen.
+  </div>
+</div>
+
+<div class="wrap">
+
+  <h2>Board snapshot</h2>
+  <div class="board">
+
+    <!-- 101 -->
+    <article class="tcard">
+      <div class="top">
+        <span class="tid">#101 · customer_order</span>
+        <span class="badge resolved">Resolved</span>
+      </div>
+      <div class="body">
+        <div class="subject">Bulldog tee</div>
+        <div class="requester">Tauhid Zaman · CC-TEE-WHITE · size S · qty 1</div>
+        <p class="outcome">A stockout that was really a cash problem. Size S sat at <b>0 on hand</b>
+          and the reprint behind it was invoice 501 — unpaid and 3 days overdue. Paying it released
+          the reprint; the customer was quoted <b>2026-09-05</b> from the vendor's 5-day lead time.</p>
+
+        <div class="chain">
+          <span class="ag boss">Boss</span><span class="arrow">→</span>
+          <span class="ag inventory">Inventory</span><span class="arrow">→</span>
+          <span class="ag accounting">Accounting</span><span class="arrow">→</span>
+          <span class="ag customer_service">Cust. Service</span>
+        </div>
+
+        <div class="kv">
+          <div><span>Hand-offs</span><strong>3 / 10</strong></div>
+          <div><span>MCP calls</span><strong>6</strong></div>
+          <div><span>Cash impact</span><strong>−840.00</strong></div>
+        </div>
+
+        <ul class="tools">
+          <li>get_open_tickets</li><li>get_inventory_and_pricing</li><li>get_vendor_invoices</li>
+          <li>get_cash_balance</li><li>draft_payment_voucher</li><li>update_ticket_status</li>
+        </ul>
+
+        <div class="approval">
+          <b>VCH-INVOICE-501</b> · $840.00 to Bulldog Print Co · approved by <b>Chanseo Park</b>
+          · payment id 1 · $3,400.00 → $2,560.00 · invoice 501 now <b>paid</b>
+        </div>
+      </div>
+    </article>
+
+    <!-- 102 -->
+    <article class="tcard">
+      <div class="top">
+        <span class="tid">#102 · rent_notice</span>
+        <span class="badge resolved">Resolved</span>
+      </div>
+      <div class="body">
+        <div class="subject">Rent due</div>
+        <div class="requester">Elm City Properties · lease 1 · Chapel Street shop</div>
+        <p class="outcome">An email claimed rent was due in two days. Facilities checked it against
+          the lease of record — <b>$2,400.00, due 2026-09-02</b> — and the claim held. Paid on the
+          lease's figure, not the email's, two days ahead of the deadline.</p>
+
+        <div class="chain">
+          <span class="ag boss">Boss</span><span class="arrow">→</span>
+          <span class="ag facilities">Facilities</span><span class="arrow">→</span>
+          <span class="ag accounting">Accounting</span>
+        </div>
+
+        <div class="kv">
+          <div><span>Hand-offs</span><strong>2 / 10</strong></div>
+          <div><span>MCP calls</span><strong>6</strong></div>
+          <div><span>Cash impact</span><strong>−2,400.00</strong></div>
+        </div>
+
+        <ul class="tools">
+          <li>get_open_tickets</li><li>get_lease_details</li><li>get_cash_balance</li>
+          <li>get_vendor_invoices</li><li>draft_payment_voucher</li><li>update_ticket_status</li>
+        </ul>
+
+        <div class="approval">
+          <b>VCH-RENT-1</b> · $2,400.00 to Elm City Properties · approved by <b>Chanseo Park</b>
+          · payment id 2 · $2,560.00 → $160.00
+        </div>
+      </div>
+    </article>
+
+    <!-- 103 -->
+    <article class="tcard">
+      <div class="top">
+        <span class="tid">#103 · price_override</span>
+        <span class="badge resolved">Resolved</span>
+      </div>
+      <div class="body">
+        <div class="subject">Bulk hoodie discount</div>
+        <div class="requester">Yale AI Club · CC-HOOD-NAVY · size M · qty 20</div>
+        <p class="outcome">Two traps, both avoided. Size M held <b>8 of 20</b> — a 12-unit shortfall
+          invisible in the SKU's 32-unit total — and the discount was capped at <b>62.1% off list</b>,
+          the point where $58.00 reaches the $22.00 cost floor. Quoted 8 now, 12 on a reprint.</p>
+
+        <div class="chain">
+          <span class="ag boss">Boss</span><span class="arrow">→</span>
+          <span class="ag customer_service">Cust. Service</span><span class="arrow">→</span>
+          <span class="ag inventory">Inventory</span>
+          <span class="arrow">+</span>
+          <span class="ag accounting">Accounting</span>
+        </div>
+
+        <div class="kv">
+          <div><span>Hand-offs</span><strong>3 / 10</strong></div>
+          <div><span>MCP calls</span><strong>7</strong></div>
+          <div><span>Cash impact</span><strong>0.00</strong></div>
+        </div>
+
+        <ul class="tools">
+          <li>get_open_tickets</li><li>get_inventory_and_pricing ×3</li><li>get_vendor_invoices</li>
+          <li>get_cash_balance</li><li>update_ticket_status</li>
+        </ul>
+
+        <div class="approval none">
+          <b>No voucher, no payment.</b> Quote confirmed by <b>Chanseo Park</b> · balance unchanged
+          at $160.00 — a quote is not a sale
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <h2>Cash reconciliation</h2>
+  <table>
+    <thead>
+      <tr><th>Step</th><th>Reference</th><th class="num">Out</th><th class="num">Balance</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Starting balance</td><td>cash_accounts · checking</td><td class="num">—</td><td class="num">3,400.00</td></tr>
+      <tr><td>Ticket 101 · invoice 501</td><td>Bulldog Print Co · payment 1</td><td class="num">840.00</td><td class="num">2,560.00</td></tr>
+      <tr><td>Ticket 102 · lease 1 rent</td><td>Elm City Properties · payment 2</td><td class="num">2,400.00</td><td class="num">160.00</td></tr>
+      <tr><td>Ticket 103 · bulk quote</td><td>Yale AI Club · no payment row</td><td class="num">0.00</td><td class="num">160.00</td></tr>
+      <tr class="total"><td>Ending balance</td><td>two payments, both human-approved</td><td class="num">3,240.00</td><td class="num">160.00</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <b>Verified against the database.</b> Read back from
+    <code>data/campus_customs_new.db</code> after the run:
+    <code>cash_accounts.balance = 160.0</code>, exactly two rows in <code>payments</code>
+    totalling <code>3,240.00</code>, invoice 501 <code>status = 'paid'</code>, and all three
+    tickets <code>status = 'resolved'</code>. Every <code>approved_by</code> names a human —
+    no agent appears in the ledger.
+  </div>
+
+  <footer>
+    Campus Customs operations desk · MGT 409 Homework 5, Problem 9 ·
+    full trail in <code>output/audit_trail.json</code>, detail in <code>output/resolved_tickets.json</code>
+  </footer>
+</div>
+</body>
+</html>

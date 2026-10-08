@@ -1,0 +1,28 @@
+# Campus Customs (HW5) — Python dependencies
+# Install with:  python -m pip install -r requirements.txt
+
+# --- MCP server (mcp_server/server.py) ---
+# FastMCP exposes the Campus Customs database to the agents as typed tools.
+fastmcp>=4.0
+
+# --- Agent team (backend/agents.py, backend/orchestrator.py) ---
+# PydanticAI drives the five agents and connects them to the MCP server;
+# openai is the client used to reach gpt-6-luna through the Portkey gateway.
+pydantic-ai>=2.0
+openai>=1.40
+
+# --- API (backend/main.py) ---
+fastapi>=0.115
+uvicorn[standard]>=0.30
+
+# --- Shared ---
+pydantic>=2.0
+python-dotenv>=1.0
+
+# Notes
+# -----
+# * SQLite ships with Python; no driver is required.
+# * The frontend has its own dependencies — run `npm install` inside frontend/.
+# * On this machine the agents run on the system Python (which has pydantic-ai)
+#   while the MCP server subprocess runs on an interpreter with a working
+#   FastMCP install; .mcp.json records which interpreter launches the server.

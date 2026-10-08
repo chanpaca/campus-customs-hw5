@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "campus-customs-ops": {
+      "command": "python",
+      "args": ["mcp_server/server.py"],
+      "env": {
+        "CAMPUS_CUSTOMS_DB": "data/campus_customs_new.db"
+      }
+    }
+  }
+}

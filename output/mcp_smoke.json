@@ -1,0 +1,270 @@
+{
+  "generated_at": "2026-10-07T17:02:59+00:00",
+  "server": "campus-customs-ops",
+  "server_file": "mcp_server/server.py",
+  "database": "data/campus_customs_new.db",
+  "transport": "stdio, launched from .mcp.json",
+  "note": "Each tool_output is the verbatim structured response returned over the MCP protocol. Verification compares those values against a direct SQL read of the same database.",
+  "smoke_tests": [
+    {
+      "ticket": 101,
+      "prompt": "Ticket 101: Tauhid Zaman wants one size S Bulldog tee but the shelf is empty. Which vendor invoices are still unpaid, how overdue are they, and does any of them cover the reprint of that tee?",
+      "tool_name": "get_vendor_invoices",
+      "tool_args": {
+        "status": "open"
+      },
+      "tool_output": {
+        "as_of": "2026-08-31",
+        "checking": {
+          "account": "checking",
+          "balance": 3400.0,
+          "as_of": "2026-08-31"
+        },
+        "invoice_count": 1,
+        "total_amount": 840.0,
+        "invoices": [
+          {
+            "invoice_id": 501,
+            "vendor": {
+              "id": 1,
+              "name": "Bulldog Print Co",
+              "specialty": "apparel reprint",
+              "lead_days": 5
+            },
+            "amount": 840.0,
+            "due_date": "2026-08-28",
+            "status": "open",
+            "description": "Rush reprint CC-TEE-WHITE S",
+            "days_past_due": 3,
+            "is_overdue": true,
+            "earliest_delivery_if_paid_today": "2026-09-05",
+            "linked_tickets": [
+              {
+                "ticket_id": 101,
+                "type": "customer_order",
+                "requester": "Tauhid Zaman",
+                "subject": "Bulldog tee",
+                "sku": "CC-TEE-WHITE",
+                "size": "S",
+                "qty_requested": 1,
+                "status": "open",
+                "qty_on_hand": 0
+              }
+            ]
+          }
+        ],
+        "source_tables": [
+          "invoices",
+          "vendors",
+          "tickets",
+          "inventory",
+          "desk",
+          "cash_accounts"
+        ]
+      }
+    },
+    {
+      "ticket": 102,
+      "prompt": "Ticket 102: Elm City Properties emailed saying shop rent is due in 2 days. What does the lease on file actually say we owe, to whom, and by when?",
+      "tool_name": "get_lease_details",
+      "tool_args": {
+        "lease_id": 1
+      },
+      "tool_output": {
+        "as_of": "2026-08-31",
+        "found": true,
+        "not_found_reason": null,
+        "available_lease_ids": [],
+        "checking": {
+          "account": "checking",
+          "balance": 3400.0,
+          "as_of": "2026-08-31"
+        },
+        "lease_count": 1,
+        "total_monthly_rent": 2400.0,
+        "leases": [
+          {
+            "lease_id": 1,
+            "space_name": "Chapel Street shop",
+            "landlord": "Elm City Properties",
+            "monthly_rent": 2400.0,
+            "next_due": "2026-09-02",
+            "days_until_due": 2,
+            "is_overdue": false,
+            "covered_by_checking": true,
+            "notes": null,
+            "linked_tickets": [
+              {
+                "ticket_id": 102,
+                "type": "rent_notice",
+                "requester": "Elm City Properties",
+                "subject": "Rent due",
+                "status": "open",
+                "notes": "Email: shop rent due in 2 days."
+              }
+            ]
+          }
+        ],
+        "source_tables": [
+          "leases",
+          "tickets",
+          "desk",
+          "cash_accounts"
+        ]
+      }
+    },
+    {
+      "ticket": 103,
+      "prompt": "Ticket 103: the Yale AI Club wants 20 navy hoodies in size M at a bulk discount. How many size M do we actually have, and what are the list price and unit cost?",
+      "tool_name": "get_inventory_and_pricing",
+      "tool_args": {
+        "sku": "CC-HOOD-NAVY",
+        "size": "M",
+        "qty": 20
+      },
+      "tool_output": {
+        "as_of": "2026-08-31",
+        "sku": "CC-HOOD-NAVY",
+        "found": true,
+        "not_found_reason": null,
+        "known_skus": [],
+        "product_name": "Basic Hoodie Big Yale",
+        "stock_by_size": [
+          {
+            "size": "L",
+            "qty": 14,
+            "location": "Aisle A",
+            "in_stock": true
+          },
+          {
+            "size": "M",
+            "qty": 8,
+            "location": "Aisle A",
+            "in_stock": true
+          },
+          {
+            "size": "S",
+            "qty": 4,
+            "location": "Aisle A",
+            "in_stock": true
+          },
+          {
+            "size": "XL",
+            "qty": 6,
+            "location": "Aisle A",
+            "in_stock": true
+          }
+        ],
+        "total_units_all_sizes": 32,
+        "pricing": {
+          "unit_cost": 22.0,
+          "list_price": 58.0,
+          "unit_gross_margin": 36.0,
+          "gross_margin_pct": 62.1,
+          "max_discount_pct_before_selling_at_cost": 62.1
+        },
+        "pricing_warning": null,
+        "requested_size": {
+          "size": "M",
+          "exists": true,
+          "available_sizes": [],
+          "qty_on_hand": 8,
+          "location": "Aisle A",
+          "qty_requested": 20,
+          "shortfall": 12,
+          "can_fulfill_from_stock": false
+        },
+        "quote": {
+          "qty": 20,
+          "revenue_at_list": 1160.0,
+          "total_cost": 440.0,
+          "gross_margin_at_list": 720.0,
+          "price_floor_per_unit": 22.0,
+          "note": "A quote moves no cash; nothing here debits cash_accounts."
+        },
+        "source_tables": [
+          "inventory",
+          "pricing",
+          "desk"
+        ]
+      }
+    }
+  ],
+  "verification": {
+    "all_passed": true,
+    "checks": [
+      {
+        "check": "invoice 501 amount",
+        "expected": 840.0,
+        "actual": 840.0,
+        "match": true
+      },
+      {
+        "check": "invoice 501 due_date",
+        "expected": "2026-08-28",
+        "actual": "2026-08-28",
+        "match": true
+      },
+      {
+        "check": "invoice 501 vendor",
+        "expected": "Bulldog Print Co",
+        "actual": "Bulldog Print Co",
+        "match": true
+      },
+      {
+        "check": "ticket 101 tee on hand",
+        "expected": 0,
+        "actual": 0,
+        "match": true
+      },
+      {
+        "check": "lease 1 rent",
+        "expected": 2400.0,
+        "actual": 2400.0,
+        "match": true
+      },
+      {
+        "check": "lease 1 next_due",
+        "expected": "2026-09-02",
+        "actual": "2026-09-02",
+        "match": true
+      },
+      {
+        "check": "lease 1 landlord",
+        "expected": "Elm City Properties",
+        "actual": "Elm City Properties",
+        "match": true
+      },
+      {
+        "check": "hoodie list_price",
+        "expected": 58.0,
+        "actual": 58.0,
+        "match": true
+      },
+      {
+        "check": "hoodie unit_cost",
+        "expected": 22.0,
+        "actual": 22.0,
+        "match": true
+      },
+      {
+        "check": "hoodie size M qty",
+        "expected": 8,
+        "actual": 8,
+        "match": true
+      },
+      {
+        "check": "checking balance",
+        "expected": 3400.0,
+        "actual": 3400.0,
+        "match": true
+      },
+      {
+        "check": "desk reference date",
+        "expected": "2026-08-31",
+        "actual": "2026-08-31",
+        "match": true
+      }
+    ]
+  }
+}

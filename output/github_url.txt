@@ -1,0 +1,10 @@
+https://github.com/chanpaca/campus-customs-hw5
+
+Campus Customs — MGT 409 Homework 5
+Public repository. Clone with:
+
+    git clone https://github.com/chanpaca/campus-customs-hw5.git
+
+Contents: the FastMCP server (mcp_server/), the five-agent PydanticAI team and
+FastAPI backend (backend/), the React + Vite + TypeScript dashboard (frontend/),
+both SQLite databases (data/), and the full run record (output/).

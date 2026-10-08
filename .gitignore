@@ -1,0 +1,56 @@
+# ---------------------------------------------------------------------------
+# Campus Customs (HW5) — .gitignore
+# ---------------------------------------------------------------------------
+
+# --- Secrets: never commit the real .env (the example stays tracked) ---
+.env
+.env.*
+!.env.example
+
+# --- Databases ---------------------------------------------------------------
+# HW5 REQUIRES both Campus Customs databases to ship with the repo: the pristine
+# seed and the working copy the agents operate on. They are small (52 KB each)
+# and the assignment tree lists them explicitly, so they are tracked on purpose.
+# Everything else database-shaped stays out.
+*.db
+*.sqlite
+*.sqlite3
+!data/campus_customs.db
+!data/campus_customs_new.db
+
+# --- Raw product imagery (ships separately, not needed by HW5) ---
+data/products/
+**/products/*.jpg
+**/products/*.jpeg
+**/products/*.png
+**/products/*.webp
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- Node / frontend ---
+node_modules/
+dist/
+.vite/
+*.local
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# --- Scratch ---
+*.tmp
+*.corrupt.json
+output/_scripted_run_state.json

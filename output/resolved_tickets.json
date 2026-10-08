@@ -1,0 +1,357 @@
+{
+  "generated_at": "2026-10-08T03:05:52+00:00",
+  "desk_date": "2026-08-31",
+  "database": "data/campus_customs_new.db",
+  "execution_mode": "scripted",
+  "execution_mode_note": "The Portkey key for gpt-6-luna is over its usage limit (HTTP 412), so no model could be reached. These tickets were executed by backend/scripted_run.py, which follows the plan written up front in output/desk_tickets.html. Every MCP tool call, database change, and human approval recorded below is real and was performed against data/campus_customs_new.db; the routing decisions were scripted rather than model-chosen. Audit events from this run carry mode='scripted'.",
+  "approver": "Chanseo Park",
+  "cash_reconciliation": {
+    "starting_balance": 3400.0,
+    "ticket_101_outflow": -840.0,
+    "ticket_102_outflow": -2400.0,
+    "ticket_103_impact": 0.0,
+    "ending_balance": 160.0,
+    "total_disbursed": 3240.0,
+    "matches_cash_accounts": true,
+    "payments_ledger": [
+      {
+        "payment_id": 1,
+        "kind": "invoice",
+        "ref_id": 501,
+        "amount": 840.0,
+        "account": "checking",
+        "paid_at": "2026-08-31",
+        "approved_by": "Chanseo Park"
+      },
+      {
+        "payment_id": 2,
+        "kind": "rent",
+        "ref_id": 1,
+        "amount": 2400.0,
+        "account": "checking",
+        "paid_at": "2026-08-31",
+        "approved_by": "Chanseo Park"
+      }
+    ]
+  },
+  "tickets": [
+    {
+      "ticket_id": 101,
+      "type": "customer_order",
+      "requester": "Tauhid Zaman",
+      "subject": "Bulldog tee",
+      "final_status": "resolved",
+      "resolved": true,
+      "summary_outcome": "Resolved. The stockout was a cash problem: CC-TEE-WHITE size S was at 0 on hand, and the rush reprint that would refill it sat behind invoice 501, unpaid and 3 days past the desk date. Inventory identified the blocker, handed it to Accounting, who drafted a voucher and stopped. A human approved the $840.00 to Bulldog Print Co, the invoice flipped to paid, and the reprint was released. Customer Service quoted 2026-09-05, the vendor 5-day lead time measured from the desk date, rather than a date that outran the payment.",
+      "no_ship_with_unpaid_invoice": "Enforced. No delivery date was promised to Tauhid Zaman until invoice 501 was settled.",
+      "agent_contributions": [
+        {
+          "agent": "accounting",
+          "contribution": "Established invoice 501 at $840.00, 3 days past due, affordable against $3,400.00; drafted VCH-INVOICE-501 and refused to approve it."
+        },
+        {
+          "agent": "boss",
+          "contribution": "Read the board, routed to Inventory on the sku/size/qty the ticket carries, and closed the ticket after the payment cleared."
+        },
+        {
+          "agent": "customer_service",
+          "contribution": "Drafted the reply to Tauhid Zaman quoting 2026-09-05, conditional on the vendor being paid."
+        },
+        {
+          "agent": "inventory",
+          "contribution": "Confirmed CC-TEE-WHITE size S at 0 on hand (shortfall 1) and identified the unpaid reprint invoice as the real blocker rather than the shelf."
+        }
+      ],
+      "delegation_chain": [
+        "boss -> inventory",
+        "inventory -> accounting",
+        "accounting -> customer_service"
+      ],
+      "delegation_turns_used": 3,
+      "delegation_turn_budget": 10,
+      "mcp_tools_called": [
+        {
+          "agent": "boss",
+          "tool": "get_open_tickets",
+          "args": {
+            "status": "all"
+          }
+        },
+        {
+          "agent": "inventory",
+          "tool": "get_inventory_and_pricing",
+          "args": {
+            "sku": "CC-TEE-WHITE",
+            "size": "S",
+            "qty": 1
+          }
+        },
+        {
+          "agent": "accounting",
+          "tool": "get_vendor_invoices",
+          "args": {
+            "status": "open"
+          }
+        },
+        {
+          "agent": "accounting",
+          "tool": "get_cash_balance",
+          "args": {
+            "account": "checking"
+          }
+        },
+        {
+          "agent": "accounting",
+          "tool": "draft_payment_voucher",
+          "args": {
+            "kind": "invoice",
+            "ref_id": 501
+          }
+        },
+        {
+          "agent": "boss",
+          "tool": "update_ticket_status",
+          "args": {
+            "ticket_id": 101,
+            "status": "resolved",
+            "note": "Invoice 501 ($840.00) approved by Chanseo Park and paid; reprint released, customer quoted 2026-09-05."
+          }
+        }
+      ],
+      "vouchers_prepared": [
+        {
+          "voucher_id": "VCH-INVOICE-501",
+          "amount": 840.0,
+          "payee": "Bulldog Print Co",
+          "requires_human_approval": true,
+          "status_at_draft": "awaiting_human_approval"
+        }
+      ],
+      "human_approvals": [
+        {
+          "approved_by": "Chanseo Park",
+          "kind": "invoice",
+          "ref_id": 501,
+          "amount": 840.0,
+          "payment_id": 1,
+          "balance_before": 3400.0,
+          "balance_after": 2560.0
+        }
+      ],
+      "cash_impact": 840.0,
+      "audit_events": 19,
+      "ticket_notes": "Needs a tee in size S.\n[2026-08-31] Invoice 501 ($840.00) approved by Chanseo Park and paid; reprint released, customer quoted 2026-09-05."
+    },
+    {
+      "ticket_id": 102,
+      "type": "rent_notice",
+      "requester": "Elm City Properties",
+      "subject": "Rent due",
+      "final_status": "resolved",
+      "resolved": true,
+      "summary_outcome": "Resolved. The ticket arrived as an email claiming rent was due in two days. Facilities checked lease 1 of record (Chapel Street shop, Elm City Properties, $2,400.00, next due 2026-09-02) and confirmed the claim matched before anything was paid. Accounting verified the balance covered it with $160.00 to spare and drafted the voucher. A human approved $2,400.00, settling the rent two days ahead of the due date.",
+      "no_ship_with_unpaid_invoice": "Not applicable - no goods involved.",
+      "agent_contributions": [
+        {
+          "agent": "accounting",
+          "contribution": "Confirmed $2,560.00 available after ticket 101, flagged that a third disbursement would not fit, and drafted VCH-RENT-1."
+        },
+        {
+          "agent": "boss",
+          "contribution": "Routed to Facilities on the lease_id the ticket carries, and closed the ticket after settlement."
+        },
+        {
+          "agent": "facilities",
+          "contribution": "Verified the email claim against lease 1 of record: $2,400.00 to Elm City Properties, due 2026-09-02, 2 days out."
+        }
+      ],
+      "delegation_chain": [
+        "boss -> facilities",
+        "facilities -> accounting"
+      ],
+      "delegation_turns_used": 2,
+      "delegation_turn_budget": 10,
+      "mcp_tools_called": [
+        {
+          "agent": "boss",
+          "tool": "get_open_tickets",
+          "args": {
+            "status": "all"
+          }
+        },
+        {
+          "agent": "facilities",
+          "tool": "get_lease_details",
+          "args": {
+            "lease_id": 1
+          }
+        },
+        {
+          "agent": "accounting",
+          "tool": "get_cash_balance",
+          "args": {
+            "account": "checking"
+          }
+        },
+        {
+          "agent": "accounting",
+          "tool": "get_vendor_invoices",
+          "args": {
+            "status": "open"
+          }
+        },
+        {
+          "agent": "accounting",
+          "tool": "draft_payment_voucher",
+          "args": {
+            "kind": "rent",
+            "ref_id": 1
+          }
+        },
+        {
+          "agent": "boss",
+          "tool": "update_ticket_status",
+          "args": {
+            "ticket_id": 102,
+            "status": "resolved",
+            "note": "Lease 1 rent $2,400.00 verified against the lease of record and approved by Chanseo Park; paid ahead of 2026-09-02."
+          }
+        }
+      ],
+      "vouchers_prepared": [
+        {
+          "voucher_id": "VCH-RENT-1",
+          "amount": 2400.0,
+          "payee": "Elm City Properties",
+          "requires_human_approval": true,
+          "status_at_draft": "awaiting_human_approval"
+        }
+      ],
+      "human_approvals": [
+        {
+          "approved_by": "Chanseo Park",
+          "kind": "rent",
+          "ref_id": 1,
+          "amount": 2400.0,
+          "payment_id": 2,
+          "balance_before": 2560.0,
+          "balance_after": 160.0
+        }
+      ],
+      "cash_impact": 2400.0,
+      "audit_events": 17,
+      "ticket_notes": "Email: shop rent due in 2 days.\n[2026-08-31] Lease 1 rent $2,400.00 verified against the lease of record and approved by Chanseo Park; paid ahead of 2026-09-02."
+    },
+    {
+      "ticket_id": 103,
+      "type": "price_override",
+      "requester": "Yale AI Club",
+      "subject": "Bulk hoodie discount",
+      "final_status": "resolved",
+      "resolved": true,
+      "summary_outcome": "Resolved as a quote. Size M held 8 units against the 20 requested, a shortfall of 12 that is invisible to anyone reading the SKU total of 32 across all sizes. Inventory put the missing 12 on a Bulldog Print Co reprint at 5 lead days (about 2026-09-05). Accounting bounded the discount at 62.1% off list, the point at which the $58.00 list price reaches the $22.00 unit cost. Customer Service drafted a quote of 8 now and 12 to follow, with the discount proposed rather than granted. No cash moved.",
+      "no_ship_with_unpaid_invoice": "Enforced in spirit - nothing was promised beyond what stock and lead times support.",
+      "agent_contributions": [
+        {
+          "agent": "accounting",
+          "contribution": "Set the floor at $22.00 per unit and capped any discount at 62.1% off list, escalating the override to a human."
+        },
+        {
+          "agent": "boss",
+          "contribution": "Routed to Customer Service because the deliverable was a quote, not a database change."
+        },
+        {
+          "agent": "customer_service",
+          "contribution": "Read stock by size rather than the SKU total, caught the 12-unit shortfall, and drafted the quote."
+        },
+        {
+          "agent": "inventory",
+          "contribution": "Supplied the per-size spread (S 4, M 8, L 14, XL 6) and the 5-day reprint lead time for the missing 12."
+        }
+      ],
+      "delegation_chain": [
+        "boss -> customer_service",
+        "customer_service -> inventory",
+        "customer_service -> accounting"
+      ],
+      "delegation_turns_used": 3,
+      "delegation_turn_budget": 10,
+      "mcp_tools_called": [
+        {
+          "agent": "boss",
+          "tool": "get_open_tickets",
+          "args": {
+            "status": "all"
+          }
+        },
+        {
+          "agent": "customer_service",
+          "tool": "get_inventory_and_pricing",
+          "args": {
+            "sku": "CC-HOOD-NAVY",
+            "size": "M",
+            "qty": 20
+          }
+        },
+        {
+          "agent": "inventory",
+          "tool": "get_inventory_and_pricing",
+          "args": {
+            "sku": "CC-HOOD-NAVY"
+          }
+        },
+        {
+          "agent": "inventory",
+          "tool": "get_vendor_invoices",
+          "args": {
+            "status": "all"
+          }
+        },
+        {
+          "agent": "accounting",
+          "tool": "get_inventory_and_pricing",
+          "args": {
+            "sku": "CC-HOOD-NAVY",
+            "qty": 20
+          }
+        },
+        {
+          "agent": "customer_service",
+          "tool": "get_cash_balance",
+          "args": {
+            "account": "checking"
+          }
+        },
+        {
+          "agent": "boss",
+          "tool": "update_ticket_status",
+          "args": {
+            "ticket_id": 103,
+            "status": "resolved",
+            "note": "Quote confirmed by Chanseo Park: 8 size M now, 12 on a reprint (~2026-09-05), discount capped at 62.1% off list. No cash movement."
+          }
+        }
+      ],
+      "vouchers_prepared": [],
+      "human_approvals": [
+        {
+          "approved_by": "Chanseo Park",
+          "kind": "quote_confirmation",
+          "ref_id": 103,
+          "amount": 0.0,
+          "payment_id": null,
+          "balance_before": 160.0,
+          "balance_after": 160.0
+        }
+      ],
+      "cash_impact": 0.0,
+      "audit_events": 19,
+      "ticket_notes": "Student org wants 20 hoodies, size M, asking for a bulk discount.\n[2026-08-31] Quote confirmed by Chanseo Park: 8 size M now, 12 on a reprint (~2026-09-05), discount capped at 62.1% off list. No cash movement."
+    }
+  ],
+  "audit_trail": {
+    "file": "output/audit_trail.json",
+    "total_events": 181,
+    "events_from_this_run": 55
+  }
+}
