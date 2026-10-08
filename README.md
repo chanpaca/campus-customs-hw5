@@ -163,7 +163,17 @@ If your backend is on a different port, put `VITE_API_TARGET=http://127.0.0.1:80
 
 ### Step 5 — Run the three tickets
 
-In the dashboard:
+**Reset the database first.** A full three-ticket run must start from the pristine seed, or
+the cash will not reconcile: invoice 501 will already be marked `paid`, the payments ledger
+will carry rows from the previous run, and the balance will not begin at $3,400.00. Before
+every full run, either click **Reset desk** in the dashboard, or:
+
+```bash
+cp data/campus_customs.db data/campus_customs_new.db
+```
+
+Confirm the desk is clean — the header should read **$3,400.00** and all three tickets should
+show **Open** — then work them in order:
 
 1. **Ticket 101 — Bulldog tee.** Select it, click **Run Agent Team**. Inventory finds
    `CC-TEE-WHITE / S` at 0 on hand and traces the blocker to invoice 501 — $840.00 to Bulldog
